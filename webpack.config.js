@@ -3,12 +3,23 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
 const dotenv = require('dotenv');
 
-// Load environment variables
-const env = dotenv.config().parsed || {};
+// Load .env into process.env (preserving existing env vars)
+const result = dotenv.config();
+if (result.error && result.error.code != 'ENOENT') {
+  throw result.error;
+}
 
-// Convert env variables to webpack format
-const envKeys = Object.keys(env).reduce((prev, next) => {
-  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+// Only expose REACT_APP_* vars to the client bundle
+const clientEnv = Object.keys(process.env)
+  .filter((key) => key.startsWith('REACT_APP_'))
+  .reduce((acc, key) => {
+    acc[key] = process.env[key];
+    return acc;
+  }, {});
+
+// Convert env variables to webpack DefinePlugin format
+const envKeys = Object.keys(clientEnv).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(clientEnv[next]);
   return prev;
 }, {});
 
