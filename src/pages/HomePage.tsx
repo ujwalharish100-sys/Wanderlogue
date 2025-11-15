@@ -1,23 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiMapPin, FiCalendar, FiTrendingUp, FiHeart, FiArrowRight } from 'react-icons/fi';
 import { useTravelStore } from '@features/travel/state';
 import { Button } from '@components/Button';
 import { Card } from '@components/Card';
+import { useAuthStore } from '@features/auth/authStore';
 
 export const HomePage: React.FC = () => {
   const { entries, getFilteredEntries, fetchEntries } = useTravelStore();
+  const { isAuthenticated } = useAuthStore();
   const [stats, setStats] = useState({
     totalTrips: 0,
     totalCountries: 0,
     favoriteTrips: 0,
   });
 
-  // Fetch trips on mount
+  // Fetch trips only for authenticated users to avoid public 401 redirects
   useEffect(() => {
-    fetchEntries();
-  }, [fetchEntries]);
+    if (isAuthenticated) {
+      fetchEntries();
+    }
+  }, [fetchEntries, isAuthenticated]);
 
   useEffect(() => {
     const destinations = new Set(entries.map(e => e.destination.split(',').pop()?.trim()));
