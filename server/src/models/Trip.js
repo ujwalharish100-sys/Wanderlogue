@@ -70,17 +70,17 @@ const tripSchema = new mongoose.Schema(
       trim: true,
       lowercase: true,
     }],
-    location: {
-      type: {
-        type: String,
-        enum: ['Point'],
-        default: 'Point',
-      },
-      coordinates: {
-        type: [Number], // [longitude, latitude]
-      },
-      address: String,
-    },
+    // location: {
+    //   type: {
+    //     type: String,
+    //     enum: ['Point'],
+    //     default: 'Point',
+    //   },
+    //   coordinates: {
+    //     type: [Number], // [longitude, latitude]
+    //   },
+    //   address: String,
+    // },
     isFavorite: {
       type: Boolean,
       default: false,
@@ -102,7 +102,7 @@ const tripSchema = new mongoose.Schema(
 );
 
 // Index for geospatial queries
-tripSchema.index({ location: '2dsphere' });
+// tripSchema.index({ location: '2dsphere' });
 
 // Index for text search
 tripSchema.index({ title: 'text', destination: 'text', tags: 'text' });
