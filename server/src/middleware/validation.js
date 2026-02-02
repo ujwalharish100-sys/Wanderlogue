@@ -87,8 +87,16 @@ export const tripValidation = [
   body('coverImage')
     .notEmpty()
     .withMessage('Cover image is required')
-    .isURL()
-    .withMessage('Cover image must be a valid URL'),
+    .custom((value) => {
+      // Accept both regular URLs and base64 data URLs
+      const urlRegex = /^https?:\/\/.+/;
+      const base64Regex = /^data:image\/[a-zA-Z]+;base64,/;
+      
+      if (!urlRegex.test(value) && !base64Regex.test(value)) {
+        throw new Error('Cover image must be a valid URL or base64 data URL');
+      }
+      return true;
+    }),
   body('story')
     .optional()
     .isLength({ max: 10000 })
