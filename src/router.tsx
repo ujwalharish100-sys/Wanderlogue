@@ -6,6 +6,7 @@ import { ProfilePage } from './pages/ProfilePage';
 import { TripListPage } from './features/travel/pages/TripListPage';
 import { TripDetailPage } from './features/travel/pages/TripDetailPage';
 import { AddTripPage } from './features/travel/pages/AddTripPage';
+import { EditTripPage } from './features/travel/pages/EditTripPage';
 import { TimelinePage } from './features/travel/pages/TimelinePage';
 import { SearchPage } from './features/travel/pages/SearchPage';
 import { LoginPage } from './features/auth/pages/LoginPage';
@@ -52,6 +53,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <AddTripPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'edit-trip/:id',
+        element: (
+          <ProtectedRoute>
+            <EditTripPage />
           </ProtectedRoute>
         ),
       },
